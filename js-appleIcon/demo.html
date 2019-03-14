@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        text-decoration: none;
+      }
+      a img {
+        width: 64px;
+        height: 64px;
+      }
+      .wrapper {
+        /* position: absolute; */
+        /* bottom: 50px; */
+        margin: 500px auto ;
+        /* border: 1px solid black; */
+        text-align: center;
+        /* display: inline-block; */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <a href="XXX"> <img src="./图标图片/a.png" alt="" /> </a>
+      <a href="XXX"> <img src="./图标图片/b.png" alt="" /> </a>
+      <a href="XXX"> <img src="./图标图片/c.png" alt="" /> </a>
+      <a href="XXX"> <img src="./图标图片/d.jpg" alt="" /> </a>
+      <a href="XXX"> <img src="./图标图片/e.png" alt="" /> </a>
+      <a href="XXX"> <img src="./图标图片/f.png" alt="" /> </a>
+    </div>
+    <script src="jquery.js"></script>
+    <script>
+
+      //mousemove事件是绑定在document上的，每次事件触发都需要求每张图片中心点距离当前鼠标位置的距离
+      $(document).on("mousemove", function(e) {
+        var event = e || window.event;
+        function getDis(item) {
+          var item = $(item);  //将DOM对象转化为jQuery对象
+          var x = parseInt(item.offset().left) + 64 / 2; //图片中心点位置距离浏览器窗口边框的距离
+          var y = parseInt(item.offset().top)+ 64 / 2;
+          var a = Math.abs(event.pageX - x);    //勾股定理
+          var b = Math.abs(event.pageY - y);
+          return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));  //鼠标当前位置距离图片中心点的距离 的绝对值
+        }
+        //循环，求每张图片中心点距离当前鼠标位置的距离
+        //每次鼠标移动，每张图片都需要重新计算并判断自身是否需要变化，参与互动
+        for(i = 0;i<$("img").length;i++){
+            //$("img")返回DOM对象的集合，是一个类数组
+            var dis = getDis($("img")[i]);  //使用函数，$("img")[i]表示的是DOM对象，不是jQuery对象
+
+            dis = Math.min(dis,200);  //限制触发变化的距离
+            var num = (200 - dis)/200 * 64 + 64;  //哪种图片中心点离鼠标越近，就变得越大 ; 超过范围，不发生变化
+            $($("img")[i]).css({
+                "width":num + "px",
+                "height":num + "px"
+            })
+        }
+      });
+    </script>
+  </body>
+</html>
