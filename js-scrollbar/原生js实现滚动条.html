@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Scroll</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 18px;
+    }
+    /* body{
+        overflow: hidden;
+    } */
+    .container {
+        /* 相对定位 */
+        position: relative; 
+        width: 380px;
+        height: 400px;
+        margin: 100px auto;
+        border: 1px solid black;
+        /* 溢出部分隐藏 */
+        overflow: hidden;  
+    }
+    .contants {
+        /* 绝对定位 */
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 350px; 
+        /* 固定宽度，高度由内容撑开 */
+        background: #cccccc;
+    }
+    ul {
+        /* 绝对定位 */
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 28px;
+        height: 398px;
+        border: 1px solid #cccccc;
+    }
+    .ico {
+        width: 28px;
+        height: 28px;
+        background: #cccccc;
+    }
+    .ico img{
+        width: 100%;
+        height: 100%;
+    }
+    .duration {
+        /* 相对定位 */
+        position: relative;
+        width: 100%;
+        height: 342px;
+    }
+    .drag {
+        /* 绝对定位 */
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 0;
+        background: black;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="contants">小说，以刻画人物形象为中心，通过完整的故事情节和环境描写来反映社会生活的文学体裁。
+            人物、情节、环境是小说的三要素。情节一般包括开端、发展、高潮、结局四部分，有的包括序幕、尾声。环境包括自然环境和社会环境。 小说按照篇幅及容量可分为长篇、中篇、短篇和微型小说（小小说）。按照表现的内容可分为神话、仙侠、武侠、古传、当代等。按照体制可分为章回体小说、日记体小说、书信体小说、自传体小说。按照语言形式可分为文言小说和白话小说。
+            小说与诗歌、散文、戏剧，并称“四大文学体裁”。
+            小说刻画人物的方法：心理描写、动作描写、语言描写、外貌描写、神态描写，同时，小说是一种写作方法。
+            小说，以刻画人物形象为中心，通过完整的故事情节和环境描写来反映社会生活的文学体裁。
+            人物、情节、环境是小说的三要素。情节一般包括开端、发展、高潮、结局四部分，有的包括序幕、尾声。环境包括自然环境和社会环境。 小说按照篇幅及容量可分为长篇、中篇、短篇和微型小说（小小说）。按照表现的内容可分为神话、仙侠、武侠、古传、当代等。按照体制可分为章回体小说、日记体小说、书信体小说、自传体小说。按照语言形式可分为文言小说和白话小说。
+            小说与诗歌、散文、戏剧，并称“四大文学体裁”。
+            小说刻画人物的方法：心理描写、动作描写、语言描写、外貌描写、神态描写，同时，小说是一种写作方法。小说，以刻画人物形象为中心，通过完整的故事情节和环境描写来反映社会生活的文学体裁。
+            人物、情节、环境是小说的三要素。情节一般包括开端、发展、高潮、结局四部分，有的包括序幕、尾声。环境包括自然环境和社会环境。 小说按照篇幅及容量可分为长篇、中篇、短篇和微型小说（小小说）。按照表现的内容可分为神话、仙侠、武侠、古传、当代等。按照体制可分为章回体小说、日记体小说、书信体小说、自传体小说。按照语言形式可分为文言小说和白话小说。
+            小说与诗歌、散文、戏剧，并称“四大文学体裁”。
+            小说刻画人物的方法：心理描写、动作描写、语言描写、外貌描写、神态描写，同时，小说是一种写作方法。小说，以刻画人物形象为中心，通过完整的故事情节和环境描写来反映社会生活的文学体裁。
+            人物、情节、环境是小说的三要素。情节一般包括开端、发展、高潮、结局四部分，有的包括序幕、尾声。环境包括自然环境和社会环境。 小说按照篇幅及容量可分为长篇、中篇、短篇和微型小说（小小说）。按照表现的内容可分为神话、仙侠、武侠、古传、当代等。按照体制可分为章回体小说、日记体小说、书信体小说、自传体小说。按照语言形式可分为文言小说和白话小说。
+            小说与诗歌、散文、戏剧，并称“四大文学体裁”。
+            小说刻画人物的方法：心理描写、动作描写、语言描写、外貌描写、神态描写，同时，小说是一种写作方法。
+        </div>
+        <ul>
+            <li class="ico up"><img src="up.png" alt=""></li>
+            <li class="duration">
+                <div class="drag"></div>
+            </li>
+            <li class="ico down"><img src="down.png" alt="">
+            </li>
+        </ul>
+    </div>
+    <script>
+
+
+        (function () {
+            var container = document.getElementsByClassName('container')[0],
+                drag = document.getElementsByClassName('drag')[0],
+                duration = document.getElementsByClassName('duration')[0],
+                contants = document.getElementsByClassName('contants')[0],
+                //显示内容窗口的高度
+                //内容的高度
+                containerHeight = document.getElementsByClassName('container')[0].offsetHeight,
+                contantsHeight = document.getElementsByClassName('contants')[0].offsetHeight;
+            //滚动条内方块的大小 = （内容的高度/显示内容窗口的高度） * 整个滚动条的高度
+            var drageHeight = Math.floor(containerHeight / contantsHeight * duration.offsetHeight);
+            drag.style.height = drageHeight + 'px';  //设置滚动条内方块的高度  dom间接操作css
+            init()  //入口函数
+            function init() {
+                starDrag(drag, duration);//拖拽 滑动条
+                scrollWheel(drag, container); //鼠标中间的滑轮滑动
+                btnScoll(drag) //点击上下按钮
+            }
+
+            /*这种方式的思想是（鼠标点移动距离） ：  鼠标移动的距离 = div左上角顶点移动的距离
+             div.offsetTop2/div.offsetLeft2 =(div.offsetTop1/div.offsetLeft1) + (e.pageX2/e.pageY2 - e.pageX1/e.pageY1)
+            */
+
+            //拖拽滑动条
+            function starDrag(item, duration) {
+                addEvent(item, 'mousedown', function (e) {
+                    e = e || window.event;
+                    e.preventDefault();  //阻止默认事件
+                    var topY = e.pageY;  //记录下鼠标在div上点下去的位置（原来位置）
+
+                    document.onmousemove = function (e) {
+                        e = e || window.event;
+                        e.preventDefault(); //阻止默认事件
+                        var moveY = e.pageY - topY;  //鼠标移动的距离（后来位置-原来位置）
+                        //console.log(moveY);
+                        if (moveY > 0) {   //判断往上滑还是往下滑 
+                            //div左上角的顶点移动的距离和鼠标移动的距离是一样的
+                            //div的位置是以左上角的顶点距离窗口边框为准的
+                            //item.style.top和item.style.left刚好可以标示div左上角的顶点到窗口边框的距离
+                            //但是在这里窗口边框是ul的边框（设置了相对定位和绝对定位）
+                            //div的位置也是相对于ul来说的
+                            // console.log('滑块往下走');
+                            item.style.top = moveY + item.offsetTop + 'px';  //div当前左上角顶点距离ul边框的距离
+                            //item.offsetTop是一个变量，不是一个固定的值
+                            //判断到ul的底部
+                            if ((item.offsetHeight + item.offsetTop) > duration.offsetHeight) {
+                                item.style.top = duration.offsetHeight - item.offsetHeight + 'px';
+                            }
+                        } else {
+                            // console.log('滑块往上走');
+                            //判断到ul的顶部
+                            item.style.top = moveY + item.offsetTop + 'px';
+                            if ((item.offsetTop) <= 0) {  
+                                item.style.top = 0 + 'px';   
+                            }
+                        }
+                        topY = e.pageY;
+                        gunScoll(item);   //内容滚动
+                    }
+                    document.onmouseup = function () {
+                        document.onmousemove = null;
+                    }
+                })
+            }
+
+            //鼠标中间的滑轮滚动
+            function scrollWheel(item, box) {
+                var t = 0;
+                addEvent(box, 'mousewheel', fnwheel)
+                function fnwheel(e) {
+                    // console.log(e.wheelDeltaY);
+                    e.preventDefault();
+                    if (e.wheelDeltaY > 0) {
+                        // console.log('滚轮往下滑，内容区域出现上面的');
+                        item.style.top = item.offsetTop + 10 + 'px';  //div当前左上角顶点距离ul边框的距离
+                        if ((item.offsetHeight + item.offsetTop) > duration.offsetHeight) {
+                            item.style.top = duration.offsetHeight - item.offsetHeight + 'px';
+                        }
+                    } else {
+                        //console.log('滚轮往上滑，内容区域出现下面的');
+                        item.style.top = item.offsetTop -10 + 'px';  //div当前左上角顶点距离ul边框的距离
+                        if ((item.offsetTop) <= 0) {
+                            item.style.top = 0 + 'px';
+                        }
+                    }
+                    gunScoll(item);  //内容滚动
+                }
+            }
+
+            //内容滚动
+            function gunScoll(item) {
+                // 内容显示区的高度/（整个内容的高度-内容显示区的高度） = 滚动块的高度/（整个滚动条的高度-滚动块的高度）
+                // 剩余内容显示与剩余内容的比例 = 滚动块滚动距离与剩余空间的比例
+                var scale = item.offsetTop / (duration.offsetHeight - item.offsetHeight);
+                var scollContents = scale * (contantsHeight - containerHeight);
+                // console.log(contantsHeight-contantsHeight);
+                contants.style.top = -scollContents + 'px';
+            }
+
+            //点击上下按钮（也是操作滑块）
+            function btnScoll(item) {
+                var btnUl = document.getElementsByTagName('ul')[0];
+                addEvent(btnUl, 'click', function (e) {
+                    // console.log(e.target.parentNode.className);
+                    // 点击的是图片img，img的父节点是li
+                    if (e.target.parentNode.className == 'ico up') {
+                        console.log('上');
+                        item.style.top = item.offsetTop - 10 + 'px';
+                        if ((item.offsetTop) <= 0) {
+                            item.style.top = 0 + 'px';
+                        }
+
+                    } else if (e.target.parentNode.className == 'ico down') {
+                        console.log('下');
+                        item.style.top = item.offsetTop + 10 + 'px';
+                        if ((item.offsetHeight + item.offsetTop) > duration.offsetHeight) {
+                            item.style.top = duration.offsetHeight - item.offsetHeight + 'px';
+                        }
+                    }
+                    gunScoll(item); //内容滚动
+                })
+
+
+            }
+
+            //兼容添加事件库
+            //兼容火狐、IE浏览器下的鼠标滚轮事件
+            function addEvent(obj, type, fn, bool) {
+                bool = bool || false; //默认true 冒泡  false 捕获
+                //一般情况
+                if (obj.addEventListener) {
+                    obj.addEventListener(type, handle, bool);
+                    //火狐下的滚轮事件
+                    if (type == 'mousewheel') {
+                        obj.addEventListener('DOMMouseScroll', handle, bool);
+                    }
+                } else {
+                    obj.attachEvent('on' + type, handle);
+                }
+                //兼容函数
+                function handle(e) {
+                    e = e || window.event;//event兼容
+                    e.wheel = e.wheelDelta || e.detail * -40;//滚轮方向兼容；
+                    fn.call(obj, e); //统一this指向
+                    e.preventDefault ? e.preventDefault() : e.returnValue = false;//阻止默认；
+                }
+
+            }
+            //兼容移除事件库
+            function removeEvent(obj, type, fn, bool) {
+                bool = bool || false;//默认冒泡
+                //一般情况
+                if (obj.removeEventListener) {
+                    obj.removeEventListener(type, fn, bool);
+                    // alert('yichu')
+                    //火狐下的滚轮事件
+                    if (type == 'mousewheel') {
+                        obj.removeEventListener('DOMMouseScroll', fn, bool);
+                    }
+                } else {
+                    obj.detachEvent('on' + type, fn);
+                }
+            }
+        })()
+
+
+    </script>
+</body>
+
+</html>
