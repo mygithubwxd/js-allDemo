@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div style="height: 100px;width: 100px;background: red;position: absolute;left: 0;top: 0;;"></div>
+
+    <!-- 拖拽: 1. e.pageX   鼠标标在div中点击时，鼠标相对于浏览器边框(不包括导航栏、URL部分)的距离
+            e.pageY
+         2. this.offestLeft    div相对于浏览器边框(不包括导航栏、URL部分)的距离
+            this.offsetRight 
+         3. disX   鼠标在div中点击时，相对于div边框的距离（由1.2的结果相减得到）
+            disY
+        鼠标移动的位置就是div所在的位置 
+        鼠标抬起时，解除事件处理函数
+    -->
+
+    <script>
+
+    /*该方式的思想（div左上角顶点与鼠标点的相对位置固定不变） ：鼠标移动，div也跟着移动，所以将鼠标的位置当作div左上角顶点位置，但是不能直接当做，
+                    因为鼠标点位置比div的左上角顶点多移动了一小段距离，所以要把这一小段固定距离减掉，
+                    就等于div左上角顶点的当前应该移动到的位置
+    div.style.left=e.pageX-disx
+    div.style.Top=e.pageY-disy
+    */
+
+     var div=document.getElementsByTagName('div')[0];
+     var disx,
+         disy;
+    //鼠标点击
+    //鼠标在div上点击下去的时候获取，分别获取获取鼠标位置和div位置，得到disx、disy(鼠标在div中的位置)
+     div.onmousedown=function(e){
+        var e = e || window.event;
+        disx=e.pageX-this.offsetLeft; 
+        disy=e.pageY-this.offsetTop;
+        //但是div的位置是以左上角的顶点距离窗口边框为准的
+        //e.pageX和e.pageY 或者 e.clientX和e.clientY 都可以获取鼠标位置
+        //鼠标移动
+        //将mouseover和mouseup绑定到docunment上
+        document.onmousemove=function(e){
+             var e = e || window.event;
+             //div的位置是以左上角的顶点距离窗口边框为准的
+
+             //div.style.left和div.style.top 表示的就是div的顶点距离窗口边框的位置，即div的位置
+             //div.style.left和div.style.top 要得到这两个值，可以由鼠标位置e.pageX和e.pageY得到
+             //但是div.style.left和div.style.top不能直接等于鼠标位置e.pageX和e.pageY
+             //也就是鼠标位置不能直接作为div顶点的位置
+             //因为div的顶点位置始终是在鼠标位置的右上方
+             //所以需要减去一段距离（鼠标在div上点击下去的时候获取，鼠标在div中的位置disx、disy）
+
+             div.style.left=e.pageX-disx+'px';
+             div.style.top=e.pageY-disy+'px';  //注意：需要加上单位 "px"
+        }
+        //鼠标抬起
+        //停止移动，解除事件处理函数
+        document.onmouseup=function(){
+             this.onmousemove=null;
+             this.onmouseup=null;
+        }
+     }  
+
+    </script>
+   
+</body>
+</html>

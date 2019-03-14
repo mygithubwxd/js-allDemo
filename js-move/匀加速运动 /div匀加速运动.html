@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            height: 100px;
+            width: 100px;
+            background-color: red;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    
+    </style>
+</head>
+<body>
+    <div></div>
+    <script>
+
+        //div必须先设置定位position：absolute
+
+        var oDiv = document.getElementsByTagName("div")[0];
+        var timer = 0;
+        //设置定时循环器
+        oDiv.onclick = function(){
+            runDiv(this,500)
+        }
+
+
+        //加速度不变的向右加速运动,到目标点停下来
+        function runDiv(dom,target){
+            clearInterval(timer);
+            var speed = 10;
+            var a = 2;
+            var timer = setInterval(function() {
+                //每循环一次速度都逐渐变大
+                //v = v + at 
+                speed = speed + a;  //这里t指的就是定时器的间隔时间 
+                //div.style.left 只能 查看/操作 行间样式，且返回值是一个字符串 ，同样赋值时也必须是一个字符串形式
+                if(target - dom.offsetLeft <= speed){
+                    clearInterval(timer);
+                    dom.style.left = target + "px";
+                }else{
+                    dom.style.left = dom.offsetLeft + speed + "px";
+                }
+            },50)
+        }
+
+        //加速度不变的向右加速运动
+        // function runDiv(dom){
+        //     clearInterval(timer);
+        //     var speed = 50;
+        //     var a = 2;
+        //     var timer = setInterval(function() {
+        //         //每循环一次速度都逐渐变大
+        //         //v = v + at 
+        //         speed = speed + a;  //这里t指的就是定时器的间隔时间 
+        //         //div.style.left 只能 获得/操作 行间样式
+        //         console.log(speed);
+        //         dom.style.left = dom.offsetLeft + speed + "px";
+        //     },50)
+        // }
+
+        //先做加速度不变的向右减速运动，然后做加速度不变的向左的加速运动
+        // function runDiv(dom){
+        //     clearInterval(timer);
+        //     var speed = 50;
+        //     var a = -2;
+        //     var timer = setInterval(function() {
+        //         //每循环一次速度都逐渐变大
+        //         //v = v + at 
+        //         speed = speed + a;  //这里t指的就是定时器的间隔时间 
+        //         //div.style.left 只能 获得/操作 行间样式(除非设置了绝对定位)
+        //             dom.style.left = dom.offsetLeft + speed + "px";
+        //     },50)
+        // }
+        
+    </script>
+</body>
+</html>

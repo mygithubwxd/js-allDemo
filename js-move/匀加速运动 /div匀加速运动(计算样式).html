@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+      //封装一个方法,获取某个元素的某个css属性的最终样式（更加准确）
+      function getstyle(elem, prop) {
+        if (window.getComputedStyle(elem, null)) {
+          return window.getComputedStyle(elem, null)[prop];
+        } else {
+          return elem.currentStyle[prop];
+        }
+      }
+
+      var div = document.createElement("div");
+      document.body.appendChild(div);
+      div.style.width = "100px";
+      div.style.height = "100px";
+      div.style.backgroundColor = "red";
+      div.style.position = "absolute";
+      div.style.left = "0";
+      div.style.top = "0";
+      var speed = 1;
+
+      //加速运动
+      var timer = setInterval(function() {
+        speed += speed / 10;    // 相当于a = speed/10
+        //parseInt 解析一个字符串 返回一个整数
+        div.style.left = parseInt(getstyle(div, "left")) + speed + "px";
+        div.style.top = parseInt(getstyle(div, "top")) + speed + "px";
+        if (parseInt(div.style.left) > 300 && parseInt(div.style.top) > 300) {
+          clearInterval(timer);
+        }
+      }, 10);
+
+    </script>
+  </body>
+</html>

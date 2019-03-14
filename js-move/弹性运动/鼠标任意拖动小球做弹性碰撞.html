@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100px;
+        width: 100px;
+        background-color: red;
+        border-radius: 50%;
+      }
+      span {
+        position: absolute;
+        height: 5px;
+        width: 5px;
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <script>
+      // div运动的时候，是以左上角的顶点为准，相对于浏览器边框进行运动
+
+      var div = document.getElementsByTagName("div")[0];
+      // var disx, disy;
+      // var beforeX = div.offsetLeft;  //当前div左上角顶点所在位置，每次事件触发后都需要保留的位置
+      // var beforeY = div.offsetTop;
+
+      div.onmousedown = function(e) {
+        clearInterval(this.timer)  //在小球运动过程中可以抓住小球
+        var event = e || window.event;
+        // disx = e.pageX - this.offsetLeft;  //鼠标点比div左上角顶点多移动的距离（与div左上角顶点的相对位置）
+        // disy = e.pageY - this.offsetTop;
+      
+        //本质上是：浏览器不会一直监控事件的触发，事件的监控会有一定的间隔时间 。
+        //鼠标在mousemove事件触发 间隔时间内移动一小段距离，div也跟着移动一小段距离。
+        // document.onmousemove = function(e) {
+        //   var event = e || window.event;
+        //   e.preventDefault();
+        //   var newLeft = e.pageX - disx;  //相当于div左上角顶点应该移动到的位置
+        //   var newTop = e.pageY - disy;
+
+        //   speedX = newLeft - beforeX;   //div左上角顶点在每次事件触发 间隔时间内移动的小段距离，分别作为x、y方向的初始速度
+        //   speedY = newTop - beforeY;
+
+        //   beforeX = newLeft;   //将当前一次mousemove事件触发后 移动到的位置保存下来
+        //   beforeY = newTop;
+
+        //   // 模拟拖动小球的轨迹
+        //   // 每次触发事件都会插入一个新的span
+        //   //  var span=document.createElement("span");
+        //   //  span.style.left=newLeft+'px';
+        //   //  span.style.top=newTop+'px';
+        //   //  document.body.appendChild(span); 
+
+        //   div.style.left = newLeft + "px"; //div拖拽移动
+        //   div.style.top = newTop + "px";
+
+            var beforeX = e.pageX;
+            var beforeY = e.pageY;
+            console.log(beforeX)
+            document.onmousemove=function(e){  //注意，需要传事件对象e
+              var event = e || window.event;
+              var moveX= e.pageX - beforeX;
+              var moveY= e.pageY - beforeY;              
+              speedX = moveX;  //变量未经声明就使用，会作为全局变量
+              speedY = moveY;              
+              beforeX = e.pageX;  //保存当前位置
+              beforeY = e.pageY;
+              div.style.left = moveX + div.offsetLeft + "px"; //div拖拽移动
+              div.style.top = moveY + div.offsetTop + "px";           
+            }
+        // };
+        document.onmouseup = function() {
+          this.onmousemove = null;
+          this.onmouseup = null;
+          runDiv(div, speedX, speedY);
+        };
+      };
+
+      //弹性碰撞：自由落体的升级版
+      function runDiv(obj, speedX, speedY) {
+        clearInterval(obj.timer);
+        var g = 6;
+        var u = 0.8;
+        // g重力加速度
+        // u碰到地面的能量损失
+        obj.timer = setInterval(function() {
+          speedY = speedY + g;
+          var newLeft = obj.offsetLeft + speedX;
+          var newTop = obj.offsetTop + speedY;
+          if (
+            newTop >=
+            document.documentElement.clientHeight - obj.offsetHeight
+          ) {
+            speedY *= -1;
+            speedY = speedY * u;
+            speedX = speedX * u;
+            newTop = document.documentElement.clientHeight - obj.offsetHeight;
+            // console.log(speedY)
+          }
+          if (newTop <= 0) {
+            speedY *= -1;
+            speedY = speedY * u;
+            speedX = speedX * u;
+            newTop = 0;
+          }
+          if (
+            newLeft >=
+            document.documentElement.clientWidth - obj.offsetWidth
+          ) {
+            speedX *= -1;
+            speedX = speedX * u;
+            speedY = speedY * u;
+            newLeft = document.documentElement.clientWidth - obj.offsetWidth;
+          }
+          if (newLeft <= 0) {
+            speedX *= -1;
+            speedX = speedX * u;
+            speedY = speedY * u;
+            newLeft = 0;
+          }
+
+          if (Math.abs(speedX) < 1) {
+            speedX = 0;
+          }
+          if (Math.abs(speedY) < 1) {
+            speedY = 0;
+          }
+          if (
+            speedX == 0 &&
+            speedY == 0 &&
+            newTop == document.documentElement.clientHeight - obj.offsetHeight
+          ) {
+            clearInterval(obj.timer);
+            console.log("over");
+          }
+
+          obj.style.left = newLeft + "px";
+          obj.style.top = newTop + "px";
+        }, 30);
+      }
+    </script>
+  </body>
+</html>

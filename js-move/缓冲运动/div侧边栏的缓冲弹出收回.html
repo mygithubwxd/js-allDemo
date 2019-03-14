@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+      .wrapper{
+          width: 400px;
+          height: 100px;
+          background-color: red;
+          position: absolute;
+          left: -400px;
+          top: 300px;
+          opacity: 0.9;
+      }
+      .wrapper .show{
+          width: 100px;
+          height: 100px;
+          background-color: blue;
+          position: absolute;
+          right: -100px;
+          top: 0px;
+      }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="show"></div>
+    </div>
+    <script>
+      var wrapper=document.getElementsByClassName("wrapper")[0];
+      var show=document.getElementsByClassName("show")[0];
+      var timer=0;
+      //事件冒泡：存在结构上的嵌套关系
+      wrapper.onmouseenter=function(){
+          runDiv(this,0);
+      }
+      wrapper.onmouseleave=function(){
+          runDiv(this,-400);
+      }
+
+      //缓冲运动
+      //css属性样式的缓冲运动
+      function runDiv(obj,target){           
+        clearInterval(timer);  //先清除定时器            
+        var speed; 
+        timer=setInterval(function(){                          
+            speed=(target-obj.offsetLeft)/7;  //速度逐渐减小的减速运动
+            speed=speed>0?Math.ceil(speed):Math.floor(speed);                         
+            obj.style.left=obj.offsetLeft+speed+'px'; //当前位置 + 速度
+            //obj.style.left实际效果会四舍五入取整
+            //最后obj.style.left = target           
+        },30);       
+      }
+
+    </script>
+</body>
+</html>

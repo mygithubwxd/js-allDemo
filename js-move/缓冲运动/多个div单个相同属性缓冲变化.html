@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <script>
+      var divArray = document.getElementsByTagName("div");
+      // for循环 分别为每一个div绑定onmouseenter onmouseleave事件
+      // div的width属性的缓冲变化变化
+      for (i = 0; i < divArray.length; i++) {
+        divArray[i].onmouseenter = function() {
+          runDiv(this, 400);
+        };
+        divArray[i].onmouseleave = function() {
+          runDiv(this, 100);
+        };
+      }
+
+      // div有obj.offset方法，就不需要用这个封装的查看属性值的方法
+      // obj.offsetWidth  obj.offsetHeight  obj.offsetLeft  obj.offsetTop
+
+      // 获取任意DOM对象的任意css属性的属性值的方法封装，返回值是字符串类型
+      // function getStyle(obj,prop){
+      //     if(window.getComputedStyle){
+      //         return window.getComputedStyle(obj,false)[prop];
+      //     }else{
+      //         return obj.currentstyle[prop];
+      //     }
+      // }
+
+      // 多个物体做缓冲运动（尤其是每个物体带有两个关联的事件时）就不要共用一个timer，容易被其他物体触发事件，导致
+      // 我当前这个物体定时器（timer）被清掉，本该执行的动作被终止，因为每次触发事件调用方法时，都会先清一下定时器（timer），
+      // 所以，每个obj可以设置一个自己的timer，作为自己的一个属性，此时触发自身事件事（产生定时器 清除定时器），就不会影响
+      // 到其他obj，其他obj可以完整的执行完所以动作。
+
+      var timer = 0;
+      function runDiv(obj, target) {
+        clearInterval(obj.timer);
+          obj.timer = setInterval(function() {
+          var speed = (target - obj.offsetWidth) / 7;
+          speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+          if (obj.offsetWidth == target) {
+            clearInterval(obj.timer);
+          } else {
+            obj.style.width = obj.offsetWidth + speed + "px";
+          }
+        }, 30);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        width: 200px;
+        height: 100px;
+        background-color: red;
+        margin-top: 50px;
+        opacity: 1; 
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <script>
+      var divArray = document.getElementsByTagName("div");
+
+      //每个div只变化一个属性值
+      divArray[0].onclick = function() {
+        runDiv(this, 400, "width");
+      };
+      divArray[1].onclick = function() {
+        runDiv(this, 400, "height");
+      };
+      divArray[2].onclick = function() {
+        runDiv(this, 10, "opacity"); /*相应的目标点也要扩大100倍*/
+      };
+      divArray[3].onclick = function() {
+        runDiv(this, 50, "borderWidth");
+      };
+
+      // 获取任意DOM对象的任意css属性的属性值的方法封装，返回值是字符串类型
+      function getStyle(obj, prop) {
+        if (window.getComputedStyle) {
+          return window.getComputedStyle(obj, false)[prop];
+        } else {
+          return obj.currentstyle[prop];
+        }
+      }
+
+      // 定义全局变量timer
+      var timer = 0;
+      function runDiv(obj, target, prop) {
+        clearInterval(obj.timer);
+        var speed;
+        var curStyle;
+        obj.timer = setInterval(function() {
+          //每次循环，都使用getStyle函数返回当前（实时的）css属性的属性值
+          //对于opacity属性值需要单独处理一下
+          if (prop == "opacity") {
+            curStyle = parseFloat(getStyle(obj, prop)) * 100;  //当前属性值扩大一百倍
+          } else {
+            curStyle = parseInt(getStyle(obj, prop));  
+          }
+          speed = (target - curStyle) / 7;
+          speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+          if (curStyle === target) {
+            clearInterval(obj.timer);
+          } else {
+            if (prop == "opacity") {
+              obj.style.opacity = (curStyle + speed) / 100;  //最后缩小一百倍
+            } else {
+              obj.style[prop] = curStyle + speed + "px";
+            }
+          }
+        }, 30);
+      }
+    </script>
+  </body>
+</html>

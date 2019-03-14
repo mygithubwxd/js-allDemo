@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        height: 100px;
+        width: 100px;
+        background: red;
+        border-radius: 50%;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      span {
+        height: 100px;
+        width: 1px;
+        background: black;
+        position: absolute;
+        left: 500px;
+        top: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <span></span>
+    <script>
+
+      // 小球做弹性运动，最后在目标点位置停下来
+      // 只存在一个方向上的力，速度和大小都变化的加速度a 、摩擦力u 以及 步伐speed
+
+      var div = document.getElementsByTagName("div")[0];
+      div.onclick = function() {
+        runDiv(this, 500);
+      };
+
+      var timer = 0;
+
+      // F = kx 
+      // F拉力
+      // k弹簧的劲度系数
+      // x弹簧拉长的长度
+      // 弹簧x越长，拉力F越大，拉力F方向始终指向钉子，加速度a越大
+      // 以钉子为中心（左右的分界点）
+      // 加速度a的方向（正向和反向）和拉力F（正向和反向）的方向相同
+
+      // 模拟弹性运动（加速度a  摩擦系数u  速度（步伐）speed）
+      // 靠近钉子：加速度减小的加速运动 / 加速度增大的减速运动（左边+a） 
+      // 钉子中心：第一次经过该点时速度最大
+      // 远离钉子：加速度增大的减速运动 / 加速度减小的加速运动(右边-a)
+
+      // 弹性运动
+      function runDiv(dom, target) {
+        clearInterval(dom.timer);
+        var speed = 0;
+        var a;
+        var u = 0.8;
+        dom.timer = setInterval(function() {
+          a = (target - dom.offsetLeft) / 15;  //加速度逐渐减小，超过目标点位置，加速度反向，加速度逐渐增大
+          // v = v + a  a是变化的
+          // 虽然超过目标点，加速度反向，但速度不会立刻反向，还会往前走一段距离，然后速度逐渐减小至反向速度，往回走
+          speed = speed + a;  // 但速度逐渐增大/速度逐渐减小(这里的speed是累加的)
+          speed = speed * u;  // 摩擦力》能量损失》速度减小
+          // 判断做弹性运动的小球的停止条件（需要满足以下两个条件）
+          // 1.速度等于0 && 2.所在位置为target
+          if (Math.abs(speed) < 1 && Math.abs(target - dom.offsetLeft) < 1) {
+            clearInterval(dom.timer);
+            dom.style.left = target +"px";
+          } else {
+            dom.style.left = dom.offsetLeft + speed + "px";
+          }
+        }, 30);
+      }
+      // 速度增加，但加速度减小
+      // 要操作dom.offsetLeft要先设置dom为position:absolute ，再设置left:0px
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <script>
+
+      //有两个方向的力
+
+      var div = document.getElementsByTagName("div")[0];
+
+      div.onclick = function() {
+        runDiv(this);
+      };
+      // 将timer作为obj的属性 obj.timer
+      // document.documentElement.clientHeight 求可视窗口大小，该方法标准模式下都兼容
+      // document.documentElement.clientWidth  
+      // 因为存在步伐太大，直接掠过去的情况，所以提前判断，是不是当前位置存在再走一步会跨过去的情况
+      function runDiv(obj) {
+        clearInterval(obj.timer);
+        var speedX = 6;  //横向速度
+        var speedY = 8;  //纵向速度
+        obj.timer = setInterval(function() {
+          //在跨出去的前一刻先判断一下（到目标点的距离还有多少）
+          if (document.documentElement.clientHeight -(obj.offsetTop + obj.offsetHeight)  <= speedY) {
+            obj.offsetTop = document.documentElement.clientHeight - obj.offsetHeight;
+            speedY *= -1;
+          }
+          if (obj.offsetTop <= -speedY) {
+            obj.offsetTop = 0;
+            speedY *= -1;
+          }
+          if (document.documentElement.clientWidth - (obj.offsetLeft + obj.offsetWidth) <= speedX) {
+            obj.offsetLeft = document.documentElement.clientwidth - obj.offsetWidth;
+            speedX *= -1;
+          }
+          if (obj.offsetLeft <= -speedX) {
+            obj.offsetLeft = 0;
+            speedX *= -1;
+          }
+          obj.style.left = obj.offsetLeft + speedX + "px";
+          obj.style.top = obj.offsetTop + speedY + "px";
+        }, 30);
+      }
+      
+    </script>
+  </body>
+</html>

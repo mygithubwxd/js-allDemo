@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+      }
+      ul {
+        position: relative;
+        width: 600px;
+        height: 80px;
+        border: 1px solid black;
+        margin: 100px auto 0;
+      }
+      ul li.nav {
+        height: 78px;
+        width: 148px;
+        border: 1px solid black;
+        color: #f00;
+        float: left;
+        text-align: center;
+        line-height: 78px;
+      }
+      ul li.bg {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 150px;
+        height: 80px;
+        background: #ff4400;
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li class="nav">ES6</li>
+      <li class="nav">Webpack</li>
+      <li class="nav">Vue</li>
+      <li class="nav">Node</li>
+      <!-- 带颜色的滑块 -->
+      <li class="bg"></li>  
+    </ul>
+
+    <script>
+      var liArray = document.getElementsByClassName("nav");
+      var bg = document.getElementsByClassName("bg")[0];
+      for (i = 0; i < liArray.length; i++) {
+        liArray[i].onmouseenter = function() {
+          var liLeft = this.offsetLeft; 
+          //目标点是每个onmouseenter的li给的(this.offsetLeft)，移动到目标点的右侧
+          runDiv(bg, liLeft); // 运动的物体是bg
+        };
+      }
+      //console.log(liArray[i]);
+      var timer = 0;
+
+      function runDiv(dom, target) {
+        clearInterval(dom.timer); 
+        var speed = 0;
+        var a;
+        var u = 0.8;
+        dom.timer = setInterval(function() {
+          a = (target - dom.offsetLeft) / 15;
+          speed = speed + a;
+          speed = speed * u;
+
+        //判断div是否停下来，需要满足以下两个条件
+          if (Math.abs(speed) <= 1 && Math.abs(target - dom.offsetLeft) <= 1) {
+            clearInterval(dom.timer);
+            dom.style.left = target + "px";
+          } else {
+            dom.style.left = dom.offsetLeft + speed + "px";
+          }
+        }, 30);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var div = document.createElement("div");
+      document.body.appendChild(div);
+      //设置的是行间样式
+      div.style.width = "100px";
+      div.style.height = "100px";
+      div.style.backgroundColor = "red";
+      div.style.position = "absolute";
+      div.style.left = "0";
+      div.style.top = "0";
+      var speed = 1;
+      var a = 2;
+      //设置定时循环器
+      var timer = setInterval(function() {
+        //每循环一次速度都逐渐变大
+        //v = v + at 
+      speed = speed + a;  //这里t指的就是定时器的间隔时间 
+        //div.style.left 只能 获得/操作 行间样式
+        div.style.left = div.offsetLeft + speed + "px";
+        div.style.top = div.offsetTop + speed + "px";
+        if (parseInt(div.style.left) > 300 && parseInt(div.style.top) > 300) {
+          clearInterval(timer); //清除定时器
+        }
+      }, 50);
+      
+    </script>
+  </body>
+</html>

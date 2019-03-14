@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        position: absolute;
+        left: 0px;
+      }
+      button {
+        position: absolute;
+        top: 300px;
+        background-color: blue;
+      }
+      /*目标位置*/
+      span {
+        position: absolute;
+        height: 200px;
+        width: 1px;
+        background: black;
+        top: 0px;
+        left: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <span></span> 
+    <button type="button">开始</button>
+    <script>
+
+        var oDiv=document.getElementsByTagName("div")[0];
+        var oButton=document.getElementsByTagName("button")[0];
+        oButton.onclick=function(){
+            startMove(oDiv,300)
+        }
+        
+        function startMove(dom,target){
+            clearInterval(timer);
+            //左右位置不一样，速度也不一样
+            var iSpeed = (target - dom.offsetLeft) > 0 ? 7 : -7 ;
+            var timer = setInterval(function(){
+                // 对于匀速运动，可以使用Math.abs取绝对值 兼容左右位置
+                if(Math.abs(target - dom.offsetLeft) <  Math.abs(iSpeed)){
+                    clearInterval(timer);
+                    // speed步伐太大,不控制的话，会直接掠过去
+                    // 所以当距离小于一个步伐iSpeed时，直接到位
+                    dom.style.left = target + "px";
+                }else{
+                    dom.style.left = dom.offsetLeft + iSpeed + "px";
+                }
+            },50)
+        }
+    
+    </script>
+  </body>
+</html>

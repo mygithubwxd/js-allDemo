@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        position: absolute;
+        left: 0px;
+      }
+      button {
+        position: absolute;
+        top: 300px;
+        background-color: blue;
+      }
+      /*目标位置*/
+      span {
+        position: absolute;
+        height: 200px;
+        width: 1px;
+        background: black;
+        top: 0px;
+        left: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <span></span> 
+    <button type="button">开始</button>
+    <script>
+      var div = document.getElementsByTagName("div")[0];
+      var button = document.getElementsByTagName("button")[0];
+
+      button.onclick = function() {
+        runDiv(div,300);
+      };
+      
+      function runDiv(obj,target) {
+        clearInterval(timer); //每次点击先清除定时器，防止点击多次，触发多个定时器
+        var speed; //speed相当于步伐的大小（核心）
+        var timer = setInterval(function() {
+          speed = (target - obj.offsetLeft) / 7; //设置合理的速度，缓冲运动 速度越来越小
+          // console.log(speed);  //0.42......  保持不变
+          // speed每次向上或者向下取整
+          speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed); //三目运算符
+          // console.log(obj.style.left); //297.42.... 保持不变
+          if(obj.offsetLeft == target){
+            clearInterval(timer);  //定时器内清除定时器
+          }else{
+            obj.style.left = obj.offsetLeft + speed + "px";
+          }
+          // 因为div的obj.style.left实际效果会自动四舍五入
+          // 当speed等于0.42...时，obj.style.left不会发生改变，所以obj.offsetLeft也不发生改变，speed也不会再发生改变
+        }, 50);
+      }
+// speed=(target-obj.offsetLeft)/7
+// 当obj.offsetLeft=target的时候，此时speed速度为0，且obj刚好到达target的位置，十分巧妙，但这是理想状态！
+// obj.style.left的值随着speed的变化而变化，obj.style.left的值始终都为整数（系统自动四舍五入）
+// 因为系统会自动四舍五入，所以当speed为-0.5～0.5之间时，每次会四舍五入为0，所以div始终差1px到目标位置，形成差一点的情况
+// 所以我们可以通过Math.ceil(向上取整) ，Math.floor(向下取整) ，完成这最后1px。
+
+
+
+    </script>
+  </body>
+</html>

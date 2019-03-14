@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        position: absolute;
+        opacity: 1;
+        border: 1px solid black;
+      }
+      .first {
+        top: 100px;
+        left: 0;
+      }
+      .second {
+        top: 300px;
+        left: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="first"></div>
+    <div class="second"></div>
+    <script>
+
+      /*
+       目标DOM对象（可多个）  divArray
+       目标属性（可多个）   prop
+       目标属性值（可多个） targetObj[prop]
+      */
+
+      var divArray = document.getElementsByTagName("div");
+
+      // 所有的目标属性值
+      var targetObj = {
+        width: 400,
+        height: 400,
+        opacity: 50,
+        left: 300,
+        top: 200
+      };
+      // 全局定义变量timer
+      var timer = 0;
+
+      // 拆分成单个div多个不同属性值的缓冲变化
+      divArray[0].onclick = function() {
+        runDiv(this, targetObj, function() {   //回调函数，可形成链式效果
+          runDiv(divArray[1], targetObj,function(){  //回调函数
+            alert("over")
+          });
+        });
+      };
+
+      //获取目标元素的目标属性的属性值
+      function getStyle(dom, prop) {
+        if (window.getComputedStyle) {
+          return window.getComputedStyle(dom, false)[prop];
+        } else {
+          return dom.currentstyle[prop];
+        }
+      }
+
+      // targetCol对象此时是目标属性的集合 
+      function runDiv(dom, targetCol, callback) {
+        clearInterval(dom.timer);
+        var speed;
+        var curStyle;
+        // for in循环 遍历targetCol对象中的目标属性
+        dom.timer = setInterval(function() {
+          var stop = true;
+          // for in循环，遍历对象中的目标属性prop
+          // 每循环一遍，就依次进行一次所有目标属性值的改变
+          for (prop in targetCol) {
+            if (prop == "opacity") {
+              curStyle = parseFloat(getStyle(dom, prop)) * 100;
+            } else {
+              curStyle = parseInt(getStyle(dom, prop));
+            }
+
+            speed = (targetCol[prop] - curStyle) / 7;
+            speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+
+            if (prop == "opacity") {
+              dom.style.opacity = (curStyle + speed) / 100;
+            } else {
+              dom.style[prop] = curStyle + speed + "px";
+            }
+            //每次循环都重置stop为true，如果所有属性都到达目标点，就不会有哪个属性使stop = false
+            if (curStyle != targetCol[prop]) {  //只要其中有一个属性没有到达目标点，就不能清理定时器
+              stop = false;
+            }
+          }
+          if (stop) {
+            clearInterval(dom.timer); //如果所有属性都已到达目标点位置，就清理定时器
+            typeof callback == "function" ? callback() : ""; //回调机制，前面都结果先得到了，再执行该回调函数
+            // 三目运算符 判断传进去的callback值是什么类型的，如果是随便传的值的话，也不影响，
+            // 如果是函数的话，就执行（保证程序的健壮性）
+          }
+        }, 30);
+      }
+    </script>
+  </body>
+</html>

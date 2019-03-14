@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <script>
+
+      //存在两个方向上的力，方向和大小不变的加速度a 、摩擦力u 以及 步伐speed
+
+      var div = document.getElementsByTagName("div")[0];
+
+      div.onclick = function() {
+        runDiv(this);
+      };
+      function runDiv(obj) {
+        clearInterval(obj.timer);
+        var speedX = 6;  //模拟扔出去时小球的速度
+        var speedY = 8;
+        var g = 3;  //g重力加速度
+        var u = 0.8;  //u碰到地面的能量损失
+       
+        obj.timer = setInterval(function() {
+          speedY += g;
+          //在跨出去的前一刻先判断一下（到目标点的距离还有多少）
+          if (document.documentElement.clientHeight -(obj.offsetTop + obj.clientHeight)  <= speedY) {
+            obj.offsetTop = document.documentElement.clientHeight - obj.clientHeight;
+            speedY *= -1;
+            speedY *=0.5;
+            speedX *=0.5;
+            console.log(speedY)
+
+          }
+          if (obj.offsetTop <= -speedY) {
+            obj.offsetTop = 0;
+            speedY *= -1;
+            speedY *=0.5;
+            speedX *=0.5;
+
+          }
+          if (document.documentElement.clientWidth - (obj.offsetLeft + obj.clientWidth) <= speedX) {
+            obj.offsetLeft = document.documentElement.clientwidth - obj.clientWidth;
+            speedX *= -1;
+            speedX *=0.5;
+            speedY *=0.5;
+            console.log(speedY)
+
+
+          }
+          if (obj.offsetLeft <= -speedX) {
+            obj.offsetLeft = 0;
+            speedX *= -1;
+            speedX *=0.5;
+            speedY *=0.5;
+
+          }
+          if (Math.abs(speedX) < 1) {
+            speedX = 0;  //横向速度为0
+          }
+          if (Math.abs(speedY) < 1) {
+            speedY = 0;  //纵向速度为0
+          }
+          if (
+            speedX == 0 && speedY == 0 && obj.offsetTop == document.documentElement.clientHeight - obj.offsetHeight ){ //并且停在底边 
+            clearInterval(obj.timer);
+            console.log("over");
+          }else{
+            // console.log(speedX,speedY)
+            obj.style.left = obj.offsetLeft + speedX + "px";
+            obj.style.top = obj.offsetTop + speedY + "px";
+          }    
+        }, 30);
+      }
+      // 将timer作为obj的属性 obj.timer
+      // document.documentElement.clientHeight
+      // document.documentElement.clientWidth  求可视窗口大小，该方法标准模式下都兼容
+      // newLeft newTop变量作为过渡的判断 不直接对obj.style.left或obj.style.top进行赋值
+      // 因为存在步伐太大，直接掠过去的情况，所以提前判断，将掠过去的情况先作一下兼容，再对obj.style.left或obj.style.top进行赋值
+    </script>
+  </body>
+</html>
